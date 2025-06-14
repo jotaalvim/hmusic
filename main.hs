@@ -1,5 +1,0 @@
-import Test.QuickCheck
-
-
-
-
