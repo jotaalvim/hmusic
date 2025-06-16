@@ -24,11 +24,22 @@ data Mode = Major | Minor deriving (Show, Eq)
 -- chord class
 data Class = Maj | Min | Dom7 | Dim | Aug deriving (Show, Eq)
 
-
-genMode :: Gen Mode
-genMode = arbitrary
-
 instance Arbitrary Mode where
     arbitrary = elements [Major, Minor]
 
+instance Arbitrary m => Arbitrary (Phrase m) where
+    arbitrary = genPhrase arbitrary
 
+
+genPhrase genM = do 
+    mode <- genM
+    frequency [(1, return $  Pt (Ton mode)  ), 
+               (2, return $  Pd (Sub mode) (Dom mode) )]
+
+
+
+samplePhrase :: Gen (Phrase Mode)
+samplePhrase = arbitrary
+
+sampleMode :: Gen Mode
+sampleMode =  arbitrary
